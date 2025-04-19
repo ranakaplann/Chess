@@ -174,7 +174,7 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
         int minCol = startCol < endCol ? startCol : endCol;
         int maxCol = startCol > endCol ? startCol : endCol;
         for (int col = minCol + 1; col < maxCol; col++) {
-            if (board[startCol][col] != '.') {
+            if (board[startRow][col] != '.') {
                 printf("Path blocked horizontally.\n");
                 return;
             }
@@ -186,7 +186,7 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
         int minRow = startRow < endRow ? startRow : endRow;
         int maxRow = startRow > endRow ? startRow : endRow;
         for (int row = minRow + 1; row < maxRow; row++) {
-            if (board[startRow][row] != '.') {
+            if (board[row][startCol] != '.') {
                 printf("Path blocked vertically.\n");
                 return;
             }
@@ -198,7 +198,7 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
         return;
     }
 
-    if (currentPlayer = 1 && !(piece >= 'a' && piece <= 'z')){
+    if (currentPlayer == 1 && !(piece >= 'a' && piece <= 'z')){
         printf("Black's turn: You can't move white piece!\n");
         return;
     }
@@ -211,6 +211,7 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
     board[endRow][endCol] = board[startRow][startCol];
     board[startRow][startCol] = '.';
 }
+
 
 int gameNotFinished(char board[ROW][COL], int currentPlayer) {
     return 1;  ///  TO BE IMPLEMENTED TO CHECK IF THE GAME IS FINISHED (etc. MATE ,STALE MATE ..

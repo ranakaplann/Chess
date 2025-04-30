@@ -227,9 +227,7 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
 
     int stepRow = sign(endRow - startRow);
     int stepCol = sign(endCol - startCol);
-
-
-    
+     // merhaba//
 
 
 

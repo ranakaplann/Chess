@@ -253,7 +253,10 @@ int sign(int x) {
     return -1;
 }
 
-void moveKnight() {
+void moveKnight(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
+    char piece = board[startRow][startCol];
+    char target = board[endRow][endCol];
+
 
 
 }

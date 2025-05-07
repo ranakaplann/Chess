@@ -8,13 +8,12 @@
 
 
 
-
-
 void createBoard(char board[ROW][COL]);
 void printBoard(char board[ROW][COL]);
 void movePawn();
 void moveRook();
 void moveBishop();
+void moveKnight();
 int gameNotFinished(char board[ROW][COL],int currentPlayer);
 int sign();
 void userMove(char board[ROW][COL], int currentPlayer);
@@ -227,8 +226,22 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
 
     int stepRow = sign(endRow - startRow);
     int stepCol = sign(endCol - startCol);
-     // merhaba//
 
+    int c = startCol + stepCol;
+    int r = startRow + stepRow;
+
+    while (r != endRow && r != endCol  ) {
+        if (board[r][c] != '.') {
+            printf("Path blocked for bishop.\n");
+            return;
+        }
+        r += stepRow;
+        c += stepCol;
+    }
+
+    if ((currentPlayer == 0 && target >= 'A' && target <= 'Z') || (currentPlayer == 1 && !(target >= 'a' && target <= 'z'))) {
+        printf("You can't capture your own piece!\n");
+    }
 
 
     board[endRow][endCol] = piece;
@@ -237,7 +250,12 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
 
 int sign(int x) {
     if (x > 0) return 1;
-    else return -1;
+    return -1;
+}
+
+void moveKnight() {
+
+
 }
 
 int gameNotFinished(char board[ROW][COL], int currentPlayer) {

@@ -10,15 +10,15 @@
 
 void createBoard(char board[ROW][COL]);
 void printBoard(char board[ROW][COL]);
-void movePawn();
-void moveRook();
-void moveBishop();
-void moveKnight();
-void moveQueen();
-void moveKing();
+int movePawn();
+int moveRook();
+int moveBishop();
+int moveKnight();
+int moveQueen();
+int moveKing();
 int gameNotFinished(char board[ROW][COL],int currentPlayer);
 int sign();
-void userMove(char board[ROW][COL], int currentPlayer);
+int userMove(char board[ROW][COL], int currentPlayer);
 
 int main(void) {
     printf("Welcome to the Chess Game! \n\nWhite starts first!\n\n");
@@ -29,8 +29,10 @@ int main(void) {
     createBoard(board);
     printBoard(board);
     while (gameNotFinished(board,currentPlayer)) {
-    userMove(board, currentPlayer);
-    currentPlayer = (currentPlayer + 1 ) % 2;
+        int success = userMove(board,currentPlayer);
+    if (success) {
+         currentPlayer = (currentPlayer + 1 ) % 2;
+    }
     printBoard(board);
     }
 }
@@ -70,7 +72,7 @@ void printBoard(char board[ROW][COL]){
 
 
 
-void userMove(char board[ROW][COL], int currentPlayer) {
+int userMove(char board[ROW][COL], int currentPlayer) {
     char move[3];
     char piece;
     printf("Enter the starting position (e.g. A4, G2..) :    \n");
@@ -96,84 +98,106 @@ void userMove(char board[ROW][COL], int currentPlayer) {
 
     if ( piece == '.') {
         printf("No piece at the selected position! Try again.\n");
-        userMove(board, currentPlayer);
-        return;
+        return 0;
     }
 
 
     if(piece == 'P' || piece == 'p'){
-        movePawn(board, startRow, startCol, endRow, endCol, currentPlayer);
+       return movePawn(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else if (piece == 'R' || piece == 'r'){
-        moveRook(board, startRow, startCol, endRow, endCol, currentPlayer);
+        return moveRook(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else if (piece == 'B' || piece == 'b') {
-        moveBishop(board, startRow, startCol, endRow, endCol, currentPlayer);
+        return moveBishop(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else if (piece == 'N' || piece == 'n') {
-        moveKnight(board, startRow, startCol, endRow, endCol, currentPlayer);
+        return moveKnight(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else if (piece == 'Q' || piece == 'q') {
-        moveQueen(board, startRow, startCol, endRow, endCol, currentPlayer);
+        return moveQueen(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else if (piece == 'K' || piece == 'k') {
-        moveKing(board, startRow, startCol, endRow, endCol, currentPlayer);
+        return moveKing(board, startRow, startCol, endRow, endCol, currentPlayer);
     }
 
     else {
         printf("Invalid move, please try again!\n");
-        userMove(board, currentPlayer);
+        return 0;
     }
 }
 
 
 
 
-void movePawn(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer) {
+int movePawn(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer) {
     char piece = board[startRow][startCol];
+    char target = board[endRow][endCol];
 
     if (piece != 'P' && piece != 'p') {
         printf("No pawn at the starting position! Try again.\n");
-        return;
+        return 0;
     }
-    if (currentPlayer == 0 ) { // user is white //
-        if (piece != 'P') {
+
+    if (piece == 'P') {
+        if (currentPlayer != 0) {
             printf("It's white's turn!\n");
-            return;
+            return 0;
         }
-    if (endRow != startRow - 1 || endCol != startCol) {
-        printf("Invalid move for white  pawn, pawns move  forward one square  \n");
-        return;
+
+        if (endCol == startCol && endRow == startRow - 1 && target == '.') {
+
+        }
+
+        else if (startRow == 6 && endCol == startCol && endRow == startRow - 2 &&
+                 board[startRow - 1][startCol] == '.' && target == '.') {
+                 }
+        else {
+            printf("Invalid move for white pawn. Try again!\n");
+            return 0;
         }
     }
 
-    else {
-        if (piece != 'p') {
+
+    else if (piece == 'p') {
+        if (currentPlayer != 1) {
             printf("It's black's turn!\n");
-            return;
+            return 0;
         }
-        if (endRow != startRow + 1 || endCol != startCol) {
-            printf("Invalid move for black  pawn, pawns move  forward one square  \n");
-            return;
+
+        if (endCol == startCol && endRow == startRow + 1 && target == '.') {
+
+        }
+        else if (startRow == 1 && endCol == startCol && endRow == startRow + 2 &&
+                 board[startRow + 1][startCol] == '.' && target == '.') {
+                 }
+        else {
+            printf("Invalid move for black pawn. Try again! \n");
+            return 0;
         }
     }
+
     board[endRow][endCol] = board[startRow][startCol];
     board[startRow][startCol] = '.';
+
+    return 1;
 }
 
 
 
-void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer) {
+
+int moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer) {
     char piece = board[startRow][startCol];
     char target =  board[endRow][endCol];
 
     if (startRow != endRow && startCol != endCol) {
         printf("Invalid move for rook. Rooks move only in straight lines.");
+        return 0;
     }
 
     if (startRow == endRow) {
@@ -182,7 +206,7 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
         for (int col = minCol + 1; col < maxCol; col++) {
             if (board[startRow][col] != '.') {
                 printf("Path blocked horizontally.\n");
-                return;
+                return 0;
             }
         }
 
@@ -194,32 +218,33 @@ void moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int 
         for (int row = minRow + 1; row < maxRow; row++) {
             if (board[row][startCol] != '.') {
                 printf("Path blocked vertically.\n");
-                return;
+                return 0;
             }
         }
     }
 
     if (currentPlayer == 0 && !(piece >= 'A' && piece <= 'Z')) {
         printf("White's turn: You can't move black piece!\n");
-        return;
+        return 0;
     }
 
     if (currentPlayer == 1 && !(piece >= 'a' && piece <= 'z')){
         printf("Black's turn: You can't move white piece!\n");
-        return;
+        return 0;
     }
 
     if ((piece >= 'A' && piece <= 'Z' && target >= 'A' && target <= 'Z') || (piece >= 'a' && piece <= 'z') &&  (target >= 'a' && target <= 'z')) {
         printf("You can't capture your own piece.\n");
-        return;
+        return 0;
     }
 
     board[endRow][endCol] = board[startRow][startCol];
     board[startRow][startCol] = '.';
+    return 1;
 }
 
 
-void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
+int moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
     char piece = board[startRow][startCol];
     char target = board[endRow][endCol];
 
@@ -228,14 +253,17 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
 
     if (rowDiff != colDiff) {
         printf("Invalid move for bishop. Try again.\n");
+        return 0;
     }
 
     if (currentPlayer == 0 && !(piece >= 'A' && piece <= 'Z')) {
         printf("White's turn! You can't move a black piece.\n");
+        return 0;
     }
 
     if (currentPlayer == 1 && !(piece >= 'a' && piece <= 'z')) {
         printf("Black's turn! You cant move a white piece.\n");
+        return 0;
     }
 
     int stepRow = sign(endRow - startRow);
@@ -247,7 +275,7 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
     while (r != endRow && c != endCol  ) {
         if (board[r][c] != '.') {
             printf("Path blocked for bishop.\n");
-            return;
+            return 0;
         }
         r += stepRow;
         c += stepCol;
@@ -255,17 +283,19 @@ void moveBishop(char board[ROW][COL], int startRow, int startCol, int endRow, in
 
     if ((currentPlayer == 0 && target >= 'A' && target <= 'Z') || (currentPlayer == 1 && !(target >= 'a' && target <= 'z'))) {
         printf("You can't capture your own piece!\n");
+        return 0;
     }
 
     if ((currentPlayer == 0 && target >= 'A' && target <= 'Z') ||
         (currentPlayer == 1 && target >= 'a' && target <= 'z')) {
         printf("You can't capture your own piece.\n");
-        return;
+        return 0;
         }
 
 
     board[endRow][endCol] = piece;
     board[startRow][startCol] = '.';
+    return 1;
 }
 
 int sign(int x) {
@@ -273,7 +303,7 @@ int sign(int x) {
     return -1;
 }
 
-void moveKnight(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
+int moveKnight(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
     char piece = board[startRow][startCol];
     char target = board[endRow][endCol];
 
@@ -284,17 +314,19 @@ void moveKnight(char board[ROW][COL], int startRow, int startCol, int endRow, in
         if ((currentPlayer == 0 && target >= 'A' && target <= 'Z') ||
         (currentPlayer == 1 && target >= 'a' && target <= 'z')) {
             printf("You can't capture your own piece.\n");
-            return;
+            return 0;
         }
         board[endRow][endCol] = piece;
         board[startRow][startCol] = '.';
+        return 1;
     }
     else {
         printf("Invalid move for knight. Must move in L shape.\n");
+        return 0;
     }
 }
 
-void moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
+int moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
     char piece = board[startRow][startCol];
 
     int rowDiff = abs(endRow - startRow);
@@ -307,7 +339,7 @@ void moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int
             for (int col = minCol + 1; col < maxCol; col++) {
                 if (board[startRow][col] != '.') {
                     printf("Path blocked horizontally.\n");
-                    return;
+                    return 0;
                 }
             }
 
@@ -319,7 +351,7 @@ void moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int
             for (int row = minRow + 1; row < maxRow; row++) {
                 if (board[row][startCol] != '.') {
                     printf("Path blocked vertically.\n");
-                    return;
+                    return 0;
                 }
             }
         }
@@ -335,7 +367,7 @@ void moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int
         while (r != endRow ) {
             if (board[r][c] != '.') {
                 printf("Path blocked for queen.\n");
-                return;
+                return 0;
             }
             r += stepRow;
             c += stepCol;
@@ -344,15 +376,16 @@ void moveQueen(char board[ROW][COL], int startRow, int startCol, int endRow, int
 
     else {
         printf("Invalid move for queen.\n");
-        return;
+        return 0;
     }
 
     board[endRow][endCol] = piece;
     board[startRow][startCol] = '.';
+    return 1;
 
 }
 
-void moveKing(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
+int moveKing(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer ) {
     char piece = board[startRow][startCol];
     char target =  board[endRow][endCol];
 
@@ -362,17 +395,23 @@ void moveKing(char board[ROW][COL], int startRow, int startCol, int endRow, int 
     if (rowDiff == 1 || colDiff == 1) {
         if ((currentPlayer == 0 && target >= 'A' && target <= 'Z') ||(currentPlayer == 1 && target >= 'a' && target <= 'z')) {
             printf("You can't capture your own piece.\n");
-            return;
+            return 0;
         }
         board[endRow][endCol] = piece;
         board[startRow][startCol] = '.';
+        return 1;
     }
     else {
         printf("Invalid move for king. Kings can only move one square for each direction. \n");
+        return 0;
     }
 }
 
-int gameNotFinished(char board[ROW][COL], int currentPlayer)
+int gameNotFinished(char board[ROW][COL], int currentPlayer){
+    int whiteKingExists = 0;
+    int blackKingExists = 0;
+
+    
     return 1;  ///  TO BE IMPLEMENTED TO CHECK IF THE GAME IS FINISHED (etc. MATE ,STALE MATE ..
 }
 

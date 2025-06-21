@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -19,6 +20,7 @@ int moveKing();
 int gameNotFinished(char board[ROW][COL],int currentPlayer);
 int sign();
 int userMove(char board[ROW][COL], int currentPlayer);
+int isCheckmate();
 
 int main(void) {
     printf("Welcome to the Chess Game! \n\nWhite starts first!\n\n");
@@ -151,12 +153,70 @@ int movePawn(char board[ROW][COL], int startRow, int startCol, int endRow, int e
         }
 
         if (endCol == startCol && endRow == startRow - 1 && target == '.') {
-
+            board[endRow][endCol] = board[startRow][startCol];
+            board[startRow][startCol] = '.';
+            if(endRow == 0) {
+                char choice;
+                while (1){
+                    printf("Pawn promoted! Choose a piece (Q , R, B ,N )\n");
+                    scanf(" %c",&choice);
+                    choice = toupper(choice);
+                    if (choice == 'Q' || choice == 'R' || choice == 'B' || choice == 'N') {
+                        board[endRow][endCol] = choice;
+                        break;
+                    }
+                    else{
+                        printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
         }
 
         else if (startRow == 6 && endCol == startCol && endRow == startRow - 2 &&
                  board[startRow - 1][startCol] == '.' && target == '.') {
-                 }
+                    board[endRow][endCol] = board[startRow][startCol];
+                    board[startRow][startCol] = '.';
+            if(endRow == 0) {
+                char choice;
+                while (1){
+                    printf("Pawn promoted! Choose a piece (Q , R, B ,N )\n");
+                    scanf(" %c",&choice);
+                    choice = toupper(choice);
+                    if (choice == 'Q' || choice == 'R' || choice == 'B' || choice == 'N') {
+                        board[endRow][endCol] = choice;
+                        break;
+                    }
+                    else{
+                        printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
+           }
+
+
+        else if((endRow == startRow - 1) && (abs(endCol - startCol) == 1) && (target >= 'a' && target <= 'z')) {
+            board[endRow][endCol] = board[startRow][startCol];
+            board[startRow][startCol] = '.';
+            if(endRow == 0) {
+                char choice;
+                while (1){
+                    printf("Pawn promoted! Choose a piece (Q , R, B ,N )\n");
+                    scanf(" %c",&choice);
+                    choice = toupper(choice);
+                    if (choice == 'Q' || choice == 'R' || choice == 'B' || choice == 'N') {
+                        board[endRow][endCol] = choice;
+                        break;
+                    }
+                    else{
+                        printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
+        }
+
         else {
             printf("Invalid move for white pawn. Try again!\n");
             return 0;
@@ -171,24 +231,72 @@ int movePawn(char board[ROW][COL], int startRow, int startCol, int endRow, int e
         }
 
         if (endCol == startCol && endRow == startRow + 1 && target == '.') {
-
+            board[endRow][endCol] = board[startRow][startCol];
+            board[startRow][startCol] = '.';
+                if(endRow == 7) {
+                    char choice;
+                    while (1){
+                    printf("Pawn promoted! Choose a piece (q , r, b ,n )\n");
+                    scanf(" %c",&choice);
+                        choice = toupper(choice);
+                if (choice == 'q' || choice == 'r' || choice == 'b' || choice == 'n') {
+                    board[endRow][endCol] = choice;
+                    break;
+                } else {
+                    printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
         }
+
         else if (startRow == 1 && endCol == startCol && endRow == startRow + 2 &&
-                 board[startRow + 1][startCol] == '.' && target == '.') {
-                 }
+                board[startRow + 1][startCol] == '.' && target == '.') {
+                board[endRow][endCol] = board[startRow][startCol];
+                board[startRow][startCol] = '.';
+            if(endRow == 7) {
+                char choice;
+                while (1){
+                    printf("Pawn promoted! Choose a piece (q , r, b ,n )\n");
+                    scanf(" %c",&choice);
+                    choice = toupper(choice);
+                    if (choice == 'q' || choice == 'r' || choice == 'b' || choice == 'n') {
+                        board[endRow][endCol] = choice;
+                        break;
+                    } else {
+                        printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
+                }
+
+        else if((endRow == startRow + 1) && (abs(endCol - startCol) == 1) && (target >= 'A' && target <= 'Z')) {
+            board[endRow][endCol] = board[startRow][startCol];
+            board[startRow][startCol] = '.';
+            if(endRow == 7) {
+                char choice;
+                while (1){
+                    printf("Pawn promoted! Choose a piece (q , r, b ,n )\n");
+                    scanf(" %c",&choice);
+                    choice = toupper(choice);
+                    if (choice == 'q' || choice == 'r' || choice == 'b' || choice == 'n') {
+                        board[endRow][endCol] = choice;
+                        break;
+                    } else {
+                        printf("Invalid choice, please try again!\n");
+                    }
+                }
+            }
+            return 1;
+        }
+
         else {
             printf("Invalid move for black pawn. Try again! \n");
             return 0;
         }
     }
-
-    board[endRow][endCol] = board[startRow][startCol];
-    board[startRow][startCol] = '.';
-
-    return 1;
 }
-
-
 
 
 int moveRook(char board[ROW][COL], int startRow, int startCol, int endRow, int endCol, int currentPlayer) {
@@ -408,16 +516,15 @@ int moveKing(char board[ROW][COL], int startRow, int startCol, int endRow, int e
 }
 
 int gameNotFinished(char board[ROW][COL], int currentPlayer){
-    int whiteKingExists = 0;
-    int blackKingExists = 0;
 
     
     return 1;  ///  TO BE IMPLEMENTED TO CHECK IF THE GAME IS FINISHED (etc. MATE ,STALE MATE ..
 }
 
 
+int isCheckmate(char board[], int currentPlayer) {
 
-
+}
 
 
 

@@ -517,7 +517,6 @@ int moveKing(char board[ROW][COL], int startRow, int startCol, int endRow, int e
 
 int gameNotFinished(char board[ROW][COL], int currentPlayer){
 
-    
     return 1;  ///  TO BE IMPLEMENTED TO CHECK IF THE GAME IS FINISHED (etc. MATE ,STALE MATE ..
 }
 
